@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 
 export default function Header() {
-   const [darkMode, setDarkMode] = useState(true);
+   const [darkMode, setDarkMode] = useState(false);
+
+   const color = useContext(ThemeContext)
 
    useEffect(() => {
       darkMode ?
@@ -18,7 +21,7 @@ export default function Header() {
 
    return (
       <div className="Header" style={{marginBottom: "1rem"}}>
-         <h1>React Hooks</h1>
+         <h1 style={{color}}>React Hooks</h1>
          <button onClick={handleClick} type="button">{darkMode ? 'Dark Mode' : 'Light Mode'}</button>
       </div>
    )
