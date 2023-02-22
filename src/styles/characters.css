@@ -7,10 +7,15 @@
 }
 
 .character-card {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+
    flex-shrink: 0;
    width: 20rem;
    border: 2px solid gray;
    border-radius: 2rem;
+   padding: 1rem 0;
 }
 .character-card__image {
    width: 15rem;
@@ -21,4 +26,8 @@
    margin: 1rem auto 0.5rem;
 
    text-align: left;
+}
+.character-card button {
+   width: max-content;
+   margin: 0 auto;
 }
