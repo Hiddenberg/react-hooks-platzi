@@ -57,10 +57,16 @@ button:focus-visible {
 }
 
 body {
-   transition: all 0.25s ease;
+   --bg-color:  #242424;
+   transition: background-color 0.25s ease;
+}
+
+body * {
+   transition: background-color 0.25s ease;
 }
 
 .body--light-mode {
+   --bg-color:  #f9f9f9;
    background-color: #f9f9f9;
    color: #1b1b1b;
 }
