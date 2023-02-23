@@ -1,6 +1,6 @@
 import { useState, useEffect, useReducer } from "react";
 import "../styles/characters.css"
-import FavoritesList from "./FavoritesList";
+import FavoritesBar from "./FavoritesBar";
 
 const initialState = {
    favorites: [],
@@ -48,7 +48,7 @@ export default function Characters () {
    return (
       <>
          {favoritesState.favorites.length !==0 &&
-            <FavoritesList favorites={favoritesState.favorites} />
+            <FavoritesBar favorites={favoritesState.favorites} />
          }
          <div className="Characters characters-container">
             {characters.map((character, index) => (
@@ -60,7 +60,7 @@ export default function Characters () {
                      <p className="character-card__text character-card__location">Location: {character.location.name}</p>
                      <p className="character-card__text character-card__gender">Gender: {character.gender}</p>
                   </div>
-                  <button type="button" onClick={() => handleClick(character)}>Add to favorites</button>
+                  <button type="button" onClick={() => handleClick(character)}>{favoritesState.favorites.includes(character) ? "Added to favorites" : "Add to favorites"}</button>
                </div>
             ))}
          </div>
