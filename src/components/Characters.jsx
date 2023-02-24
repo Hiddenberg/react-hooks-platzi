@@ -1,6 +1,7 @@
-import { useState, useEffect, useReducer, useMemo } from "react";
+import { useState, useEffect, useReducer, useMemo, useRef, useCallback } from "react";
 import "../styles/characters.css"
 import FavoritesBar from "./FavoritesBar";
+import SearchBar from "./Search";
 
 const initialState = {
    favorites: [],
@@ -69,10 +70,22 @@ export default function Characters () {
    const [characters, setCharacters] = useState([]);
    const [favoritesState, favsDispatch] = useReducer(favoriteReducer, initialState);
    const [search, setSearch] = useState("");
+   const searchInput = useRef(null);
 
-   const handleSearch = ev => {
-      setSearch(ev.target.value);
-   }
+   /* const handleSearch = () => {
+      setSearch(searchInput.current.value);
+   } */
+
+   /*
+      useCalback is useful for when the function needs to be trasnferred to a child component
+      because it wont re-create the function and will always return the same reference to the
+      previously created function
+   */
+   const handleSearch = useCallback(() => {
+      console.log("using callback for: ", searchInput.current.value);
+      setSearch(searchInput.current.value);
+   }, []);
+
    // ↓ Search without memoization (this gets executed even if the search doesn't change)
    // const filteredCharacters = characters.filter(character => {console.log("executing filter");return character.name.toLowerCase().includes(search.toLowerCase())});
 
@@ -81,16 +94,14 @@ export default function Characters () {
    re-calculate it if we need to access it again, it's very useful to prevent innecessary code execution
    between re-renders
    */
-  console.log("re-rendering component")
+   console.log("re-rendering component")
    const filteredCharacters = useMemo(() => {
-      console.log("executing memo for: ", search);
-      return characters.filter(character => character.name.toLowerCase().includes(search.toLowerCase()))
-   }
-   , [characters, search]
-   );
+      // console.log("executing memo for: ", search);
+      return characters.filter(character => character.name.toLowerCase().includes(search.toLowerCase()));
+   } , [characters, search]);
 
    const addToFavorites = character => {
-      console.log("adding ", character.name, " to favorites")
+      console.log("adding ", character.name, " to favorites");
       favsDispatch({type: "ADD_TO_FAVORITE", payload: character});
    }
    const deleteFavorite = character => {
@@ -121,9 +132,7 @@ export default function Characters () {
             <FavoritesBar favorites={favoritesState.favorites} deleteFavorite={deleteFavorite} />
          }
 
-         <div className="search-bar">
-            <input className="search-bar__input" type="text" placeholder="Search Character" onChange={handleSearch} value={search} />
-         </div>
+         <SearchBar handleSearch={handleSearch} search={search} searchInput={searchInput} />
 
          <div className="Characters characters-container">
             {filteredCharacters.map(character => (
