@@ -30,3 +30,16 @@
    width: max-content;
    margin: 0 auto;
 }
+
+.search-bar__input {
+   font-size: 2rem;
+   margin-bottom: 2rem;
+   border-radius: 0.5rem;
+   border: solid 2px gray;
+   padding: 0.5rem;
+}
+
+.body--light-mode .search-bar__input {
+   color: #1b1b1b;
+   background-color: aliceblue;
+}

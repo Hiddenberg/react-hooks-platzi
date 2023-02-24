@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useMemo } from "react";
 import "../styles/characters.css"
 import FavoritesBar from "./FavoritesBar";
 
@@ -68,8 +68,29 @@ const favoriteReducer = (state, action) => {
 export default function Characters () {
    const [characters, setCharacters] = useState([]);
    const [favoritesState, favsDispatch] = useReducer(favoriteReducer, initialState);
+   const [search, setSearch] = useState("");
+
+   const handleSearch = ev => {
+      setSearch(ev.target.value);
+   }
+   // ↓ Search without memoization (this gets executed even if the search doesn't change)
+   // const filteredCharacters = characters.filter(character => {console.log("executing filter");return character.name.toLowerCase().includes(search.toLowerCase())});
+
+   /* 
+   ↓ The memoization is a technique where we can save a previously computed value so we don't have to 
+   re-calculate it if we need to access it again, it's very useful to prevent innecessary code execution
+   between re-renders
+   */
+  console.log("re-rendering component")
+   const filteredCharacters = useMemo(() => {
+      console.log("executing memo for: ", search);
+      return characters.filter(character => character.name.toLowerCase().includes(search.toLowerCase()))
+   }
+   , [characters, search]
+   );
 
    const addToFavorites = character => {
+      console.log("adding ", character.name, " to favorites")
       favsDispatch({type: "ADD_TO_FAVORITE", payload: character});
    }
    const deleteFavorite = character => {
@@ -99,8 +120,13 @@ export default function Characters () {
          {favoritesState.favorites.length !==0 &&
             <FavoritesBar favorites={favoritesState.favorites} deleteFavorite={deleteFavorite} />
          }
+
+         <div className="search-bar">
+            <input className="search-bar__input" type="text" placeholder="Search Character" onChange={handleSearch} value={search} />
+         </div>
+
          <div className="Characters characters-container">
-            {characters.map(character => (
+            {filteredCharacters.map(character => (
                <div key={character.id} className="character-card">
                   <div className="character-card__info-container">
                      <h2 className="character-card__title">{character.name}</h2>
