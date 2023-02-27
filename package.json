@@ -15,7 +15,9 @@
   "devDependencies": {
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-legacy": "^4.0.1",
     "@vitejs/plugin-react-swc": "^3.0.0",
+    "terser": "^5.16.5",
     "vite": "^4.1.0"
   }
 }
