@@ -1,4 +1,5 @@
-import { useState, useEffect, useReducer, useMemo, useRef, useCallback } from "react";
+import { useState, useReducer, useMemo, useRef, useCallback } from "react";
+import useCharacters from "../hooks/useCharacters";
 import "../styles/characters.css"
 import FavoritesBar from "./FavoritesBar";
 import SearchBar from "./Search";
@@ -6,6 +7,8 @@ import SearchBar from "./Search";
 const initialState = {
    favorites: [],
 }
+
+const API = "https://rickandmortyapi.com/api/character";
 
 const favoriteReducer = (state, action) => {
    /* 
@@ -67,10 +70,11 @@ const favoriteReducer = (state, action) => {
 }
 
 export default function Characters () {
-   const [characters, setCharacters] = useState([]);
    const [favoritesState, favsDispatch] = useReducer(favoriteReducer, initialState);
    const [search, setSearch] = useState("");
    const searchInput = useRef(null);
+
+   const characters = useCharacters(API);
 
    /* const handleSearch = () => {
       setSearch(searchInput.current.value);
@@ -110,16 +114,6 @@ export default function Characters () {
    const triggerRemoveAnimation = character => {
       favsDispatch({type: "TRIGGER_REMOVE_ANIMATION", payload: character});
    }
-
-   useEffect(() => {
-      console.log("trigerring use effect")
-      if (characters.length === 0) {
-         console.log("getting characters")
-         fetch("https://rickandmortyapi.com/api/character")
-            .then(res => res.json())
-            .then(data => setCharacters(data.results))
-      }
-   }, []);
 
    const statusEmojis = {
       "Alive": "❤️",
